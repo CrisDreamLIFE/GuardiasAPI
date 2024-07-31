@@ -1,7 +1,7 @@
 class Service < ApplicationRecord
-    has_many :weeks
+  has_many :weeks
 
-    validates :name, presence: true
-    validates :start_date, presence: true
-    validates :end_date, presence: true
+  validates :name, presence: true
+  validates :start_date, presence: true
+  validates :end_date, presence: true
 end

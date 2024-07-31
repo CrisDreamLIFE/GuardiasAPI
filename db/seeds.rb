@@ -11,7 +11,7 @@ service1 = Service.create!(name: "“Monitoreo Recorrido.cl", start_date: "2024-
 
 # Helper method to create weeks
 def create_week(service, label, start_date, end_date, number, year)
-    Week.create!(label: label, start_date: start_date, end_date: end_date, service: service, number: number, year: year)
+  Week.create!(label: label, start_date: start_date, end_date: end_date, service: service, number: number, year: year)
 end
 
 # Create Weeks
@@ -27,9 +27,9 @@ week9 = Week.create!(label: "Semana 35 del 2024", start_date: "2024-08-26", end_
 
 # Create Days for Each Week
 [week1, week2, week3, week4, week5, week6, week7, week8, week9].each do |week|
-    ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"].each do |day_label|
-        Day.create!(label: day_label, week: week)
-    end
+  ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"].each do |day_label|
+    Day.create!(label: day_label, week: week)
+  end
 end
 
 # Create Engineers
@@ -40,33 +40,33 @@ engineer4 = Engineer.create!(name: "Cristian", color: "#8a5ff5")
 
 # Helper method to create start and end times for blocks
 def create_block(day, start_time_str)
-    start_time = DateTime.parse(start_time_str)
-    end_time = start_time + 1.hour
-    Block.create!(start_time: start_time, end_time: end_time, day: day)
-  end
-  
+  start_time = DateTime.parse(start_time_str)
+  end_time = start_time + 1.hour
+  Block.create!(start_time: start_time, end_time: end_time, day: day)
+end
+
 # Create Blocks for Each Day
 [week1, week2, week3, week4, week5, week6, week7, week8, week9].each do |week|
-    week.days.each do |day|
-        create_block(day, "2024-07-01T08:00:00")
-        create_block(day, "2024-07-01T10:00:00")
-        create_block(day, "2024-07-01T11:00:00")
-        create_block(day, "2024-07-01T12:00:00")
-    end
+  week.days.each do |day|
+    create_block(day, "2024-07-01T08:00:00")
+    create_block(day, "2024-07-01T10:00:00")
+    create_block(day, "2024-07-01T11:00:00")
+    create_block(day, "2024-07-01T12:00:00")
+  end
 end
 
 # Create Availabilities for Engineers
 [week1, week2, week3, week4, week5, week6, week7, week8, week9].each do |week|
-    week.blocks.each do |block|
-      Availability.create!(engineer: engineer4, block: block)
-    end
+  week.blocks.each do |block|
+    Availability.create!(engineer: engineer4, block: block)
   end
+end
 
 # Adding additional availability for the third engineer
 [week5, week6, week7, week8, week9].each do |week|
-    week.blocks.each do |block|
-        Availability.create!(engineer: engineer1, block: block)
-        Availability.create!(engineer: engineer2, block: block)
-        Availability.create!(engineer: engineer3, block: block)
-    end
+  week.blocks.each do |block|
+    Availability.create!(engineer: engineer1, block: block)
+    Availability.create!(engineer: engineer2, block: block)
+    Availability.create!(engineer: engineer3, block: block)
+  end
 end
