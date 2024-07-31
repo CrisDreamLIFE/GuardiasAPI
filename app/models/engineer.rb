@@ -1,4 +1,7 @@
 class Engineer < ApplicationRecord
-    has_many :blocks
     has_many :availabilities
+    has_many :blocks, through: :availabilities
+
+    validates :name, presence: true
+    validates :color, presence: true
 end
