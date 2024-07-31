@@ -1,6 +1,7 @@
 class Week < ApplicationRecord
   belongs_to :service
   has_many :days
+  has_many :blocks, through: :days
 
   validates :label, presence: true
   validates :start_date, presence: true
