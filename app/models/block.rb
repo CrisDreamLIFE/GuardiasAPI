@@ -6,4 +6,8 @@ class Block < ApplicationRecord
   validates :start_time, presence: true
   validates :end_time, presence: true
   validates :day_id, presence: true
+
+  def available?(engineer)
+    availabilities.exists?(engineer: engineer)
+  end
 end

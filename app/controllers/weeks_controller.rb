@@ -37,9 +37,14 @@ class WeeksController < ApplicationController
     week = Week.find(params[:id])
     engineers = Engineer.all
 
-    AssignmentAlgorithm.new([week], engineers).assign
+    algorithm = GreedyAssignmentAlgorithm.new(week, engineers)
+    algorithm.assign
 
-    render json: {message: "Shifts assigned successfully"}
+    render json: { message: 'Shift assignment completed successfully' }, status: :ok
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Week not found' }, status: :not_found
+  rescue StandardError => e
+    render json: { error: e.message }, status: :internal_server_error
   end
 
   private
