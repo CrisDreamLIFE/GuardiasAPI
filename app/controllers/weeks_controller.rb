@@ -47,6 +47,65 @@ class WeeksController < ApplicationController
     render json: { error: e.message }, status: :internal_server_error
   end
 
+  # def show_blocks_with_availability
+  #   week = Week.find(params[:id])
+  #   days = week.days.includes(blocks: :engineers)
+
+  #   result = days.each_with_object({}) do |day, result_hash|
+  #     result_hash[day.label] = day.blocks.each_with_object({}) do |block, block_hash|
+  #       block_hash[block.id] = {
+  #         engineers: block.engineers.map do |engineer|
+  #           {
+  #             name: engineer.name,
+  #             available: engineer.blocks.include?(block)
+  #           }
+  #         end
+  #       }
+  #     end
+  #   end
+
+  #   render json: result
+  # end
+  # def show_blocks_with_availability
+  #   week = Week.find(params[:id])
+  #   days = week.days.includes(:blocks)
+  
+  #   result = days.each_with_object({}) do |day, result_hash|
+  #     result_hash[day.label] = day.blocks.each_with_object({}) do |block, block_hash|
+  #       block_hash[block.id] = {
+  #         engineers: block.available_engineers
+  #       }
+  #     end
+  #   end
+  
+  #   render json: result
+  # end
+  def show_blocks_with_availability
+    week = Week.find(params[:id])
+    days = week.days.includes(:blocks, blocks: :availabilities)
+  
+    result = {
+      days: days.map do |day|
+        {
+          id: day.id,
+          label: day.label,
+          week_id: day.week_id,
+          blocks: day.blocks.map do |block|
+            {
+              id: block.id,
+              start_time: block.start_time,
+              end_time: block.end_time,
+              day_id: block.day_id,
+              engineers: block.available_engineers
+            }
+          end
+        }
+      end
+    }
+  
+    render json: result
+  end
+
   private
 
   def week_params

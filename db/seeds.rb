@@ -57,8 +57,11 @@ end
 
 [week5, week6, week7, week8, week9].each do |week|
   week.blocks.each do |block|
-    Availability.create!(engineer: engineer1, block: block)
-    Availability.create!(engineer: engineer2, block: block)
-    Availability.create!(engineer: engineer3, block: block)
+    if week.label == "Semana 31 del 2024"
+      Availability.create!(engineer: engineer1, block: block)
+    else
+      Availability.create!(engineer: engineer2, block: block)
+      Availability.create!(engineer: engineer3, block: block)
+    end    
   end
 end
