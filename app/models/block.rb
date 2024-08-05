@@ -19,6 +19,7 @@ class Block < ApplicationRecord
     
     all_engineers.map do |engineer|
       {
+        id: engineer.id,
         name: engineer.name,
         available: available_engineer_ids.include?(engineer.id)
       }

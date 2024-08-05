@@ -16,6 +16,14 @@ class Week < ApplicationRecord
   def summary_engineers
     engineers_turnos = self.blocks.joins(:engineer)
                                    .group('engineers.id')
-                                   .select('engineers.*, COUNT(blocks.id) as shift_count')
+                                   .select('engineers.*, COUNT(blocks.id) as shift_count')                                 
+                                  
+    
+    engineers_turnos_array = engineers_turnos.to_a
+    unassigned_count = self.blocks.where(engineer_id: nil).count
+    engineers_turnos_array << {
+      name: "Sin asignar",
+      shift_count: unassigned_count
+    }
   end
 end
