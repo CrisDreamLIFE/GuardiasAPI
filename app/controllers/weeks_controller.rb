@@ -47,7 +47,10 @@ class WeeksController < ApplicationController
     algorithm = GreedyAssignmentAlgorithm.new(week, engineers)
     algorithm.assign
 
-    render json: { message: 'Shift assignment completed successfully' }, status: :ok
+    result = getBlocks_with_engineer(params[:id])
+  
+    render json: result, status: :ok
+    # render json: { message: 'Shift assignment completed successfully' }, status: :ok
   rescue ActiveRecord::RecordNotFound
     render json: { error: 'Week not found' }, status: :not_found
   rescue StandardError => e
@@ -80,7 +83,63 @@ class WeeksController < ApplicationController
     render json: result
   end
 
+  def show_blocks_with_summary
+    week = Week.find(params[:id])
+    days = week.days.includes(:blocks, blocks: :availabilities)
+  
+    result = {
+      summary: week.summary_engineers,
+      days: days.map do |day|
+        {
+          id: day.id,
+          label: day.label,
+          blocks: day.blocks.map do |block|
+            {
+              id: block.id,
+              start_time: block.start_time,
+              end_time: block.end_time,
+              engineer: block.engineer
+            }
+          end
+        }
+      end
+    }
+  
+    render json: result
+  end
+
+  def show_blocks_with_engineer
+    result = getBlocks_with_engineer(params[:id])
+  
+    render json: result
+  end
+
   private
+
+  def getBlocks_with_engineer(id)
+    week = Week.find(id)
+    days = week.days.includes(:blocks, blocks: :availabilities)
+  
+    result = {
+      days: days.map do |day|
+        {
+          id: day.id,
+          label: day.label,
+          week_id: day.week_id,
+          blocks: day.blocks.map do |block|
+            {
+              id: block.id,
+              engineer_id: block.engineer_id,
+              start_time: block.start_time,
+              end_time: block.end_time,
+              day_id: block.day_id,
+              engineers: Engineer.all
+            }
+          end
+        }
+      end
+    }
+  end
 
   def week_params
     params.require(:week).permit(:label, :start_date, :end_date, :service_id, :number, :year)
