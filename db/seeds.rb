@@ -22,8 +22,10 @@ week9 = Week.create!(label: "Semana 35 del 2024", start_date: "2024-08-26", end_
 
 # Días
 [week1, week2, week3, week4, week5, week6, week7, week8, week9].each do |week|
-  ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"].each do |day_label|
-    Day.create!(label: day_label, week: week)
+  ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"].each_with_index do |day_label, index|
+    date = week.start_date.to_date + index
+    formatted_date = date.strftime("%d/%m/%Y")
+    Day.create!(label: "#{day_label} - #{formatted_date}", week: week)
   end
 end
 

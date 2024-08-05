@@ -4,6 +4,13 @@ class WeeksController < ApplicationController
     render json: weeks
   end
 
+  def getWeeksByService
+    service = Service.find(params[:id])
+    weeks = service.weeks
+
+    render json: weeks
+  end
+
   def show
     week = Week.find(params[:id])
     render json: week
@@ -47,39 +54,6 @@ class WeeksController < ApplicationController
     render json: { error: e.message }, status: :internal_server_error
   end
 
-  # def show_blocks_with_availability
-  #   week = Week.find(params[:id])
-  #   days = week.days.includes(blocks: :engineers)
-
-  #   result = days.each_with_object({}) do |day, result_hash|
-  #     result_hash[day.label] = day.blocks.each_with_object({}) do |block, block_hash|
-  #       block_hash[block.id] = {
-  #         engineers: block.engineers.map do |engineer|
-  #           {
-  #             name: engineer.name,
-  #             available: engineer.blocks.include?(block)
-  #           }
-  #         end
-  #       }
-  #     end
-  #   end
-
-  #   render json: result
-  # end
-  # def show_blocks_with_availability
-  #   week = Week.find(params[:id])
-  #   days = week.days.includes(:blocks)
-  
-  #   result = days.each_with_object({}) do |day, result_hash|
-  #     result_hash[day.label] = day.blocks.each_with_object({}) do |block, block_hash|
-  #       block_hash[block.id] = {
-  #         engineers: block.available_engineers
-  #       }
-  #     end
-  #   end
-  
-  #   render json: result
-  # end
   def show_blocks_with_availability
     week = Week.find(params[:id])
     days = week.days.includes(:blocks, blocks: :availabilities)
