@@ -10,12 +10,14 @@ Rails.application.routes.draw do
   resources :availabilities
   resources :weeks do
     member do
-      get :assign_shifts
+      get :assign_shifts # sacar de aquí
     end
   end
   
   get 'services/:id/weeks', to: 'weeks#getWeeksByService'
   get 'weeks/:id/show_blocks_with_availability', to: 'weeks#show_blocks_with_availability'
+  get 'weeks/:id/show_blocks_with_engineer', to: 'weeks#show_blocks_with_engineer'
+  get 'weeks/:id/show_blocks_with_summary', to: 'weeks#show_blocks_with_summary'
   # resources :services do
   #   resources :weeks do
   #     member do
