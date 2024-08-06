@@ -69,6 +69,8 @@ class GreedyAssignmentAlgorithm
           block.update(engineer_id: engineer_id)
           engineers_weekly_hours[engineer_id] += 1
           engineers_shifts_per_day[day_id] << engineer_id
+        else
+          block.update(engineer_id: nil)
         end
       end
     end

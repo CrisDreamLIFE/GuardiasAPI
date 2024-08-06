@@ -6,7 +6,11 @@ class WeeksController < ApplicationController
 
   def getWeeksByService
     service = Service.find(params[:id])
-    weeks = service.weeks
+    today = Date.today
+    start_date = today - 1.week
+    end_date = today + 5.weeks
+
+    weeks = service.weeks.where(start_date: start_date..end_date)
 
     render json: weeks
   end
@@ -112,6 +116,27 @@ class WeeksController < ApplicationController
     result = getBlocks_with_engineer(params[:id])
   
     render json: result
+  end
+
+  def availability
+    puts "week"
+    week = Week.find(params[:id])
+    puts "week"
+    params[:days].each do |day_params|
+      day = week.days.find(day_params[:id])
+      day_params[:blocks].each do |block_params|
+        block = day.blocks.find(block_params[:id])
+        block.availabilities.destroy_all
+        block.update(engineer_id: nil)
+        block_params[:availabilities].each do |engineer_id|
+          block.availabilities.create(engineer_id: engineer_id)
+        end
+      end
+    end
+
+    render json: { message: 'Disponibilidad actualizada' }, status: :ok
+  rescue StandardError => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   private

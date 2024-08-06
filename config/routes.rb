@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get 'weeks/:id/show_blocks_with_availability', to: 'weeks#show_blocks_with_availability'
   get 'weeks/:id/show_blocks_with_engineer', to: 'weeks#show_blocks_with_engineer'
   get 'weeks/:id/show_blocks_with_summary', to: 'weeks#show_blocks_with_summary'
+  put 'weeks/:id/availability', to: 'weeks#availability'
   # resources :services do
   #   resources :weeks do
   #     member do
